@@ -1,0 +1,362 @@
+l
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WorthIt API — Running</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f0f1a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #1e1e3a 0%, #16213e 100%);
+      border: 1px solid #2d2d5e;
+      border-radius: 20px;
+      padding: 3rem 3.5rem;
+      max-width: 720px;
+      width: 100%;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #10b981;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(1.4);
+      }
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #a78bfa, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.6rem;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      font-size: 1rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: 0.9rem;
+    }
+
+    .endpoint-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+    }
+
+    .endpoint {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      padding: 0.7rem 1rem;
+      font-size: 0.875rem;
+      transition: border-color 0.2s, background 0.2s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .endpoint:hover {
+      background: rgba(167, 139, 250, 0.08);
+      border-color: rgba(167, 139, 250, 0.3);
+    }
+
+    .method {
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      padding: 0.2rem 0.5rem;
+      border-radius: 5px;
+      min-width: 40px;
+      text-align: center;
+    }
+
+    .get {
+      background: rgba(96, 165, 250, 0.2);
+      color: #60a5fa;
+    }
+
+    .post {
+      background: rgba(52, 211, 153, 0.2);
+      color: #34d399;
+    }
+
+    .put {
+      background: rgba(251, 191, 36, 0.2);
+      color: #fbbf24;
+    }
+
+    .del {
+      background: rgba(248, 113, 113, 0.2);
+      color: #f87171;
+    }
+
+    .path {
+      font-family: 'Courier New', monospace;
+      color: #c4b5fd;
+    }
+
+    .desc {
+      color: #64748b;
+      font-size: 0.8rem;
+      margin-left: auto;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    .info-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+    }
+
+    .info-label {
+      font-size: 0.7rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.3rem;
+    }
+
+    .info-value {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #e2e8f0;
+    }
+
+    .info-value.green {
+      color: #10b981;
+    }
+
+    .try-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+      background: linear-gradient(135deg, #7c3aed, #3b82f6);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .try-btn:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    footer {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      font-size: 0.78rem;
+      color: #475569;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+
+    <div class="badge">
+      <span class="pulse"></span>
+      API Server Running
+    </div>
+
+    <h1>WorthIt Backend API</h1>
+    <p class="subtitle">
+      Smart Warranty, Repair &amp; Expense Management System<br>
+      Spring Boot REST API — Session 1 Complete ✓
+    </p>
+
+    <p class="section-title">Available Endpoints</p>
+    <div class="endpoint-list">
+
+      <a class="endpoint" href="/api/health" target="_blank">
+        <span class="method get">GET</span>
+        <span class="path">/api/health</span>
+        <span class="desc">Server health check</span>
+      </a>
+
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <span class="path">/api/auth/register</span>
+        <span class="desc">Create account (Session 2)</span>
+      </div>
+
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <span class="path">/api/auth/login</span>
+        <span class="desc">Login → JWT token (Session 2)</span>
+      </div>
+
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="path">/api/products</span>
+        <span class="desc">List all products (Session 3)</span>
+      </div>
+
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <span class="path">/api/documents/upload</span>
+        <span class="desc">Upload invoice + OCR (Session 4)</span>
+      </div>
+
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="path">/api/warranties/expiring</span>
+        <span class="desc">Expiring soon alerts (Session 4)</span>
+      </div>
+
+      <div class="endpoint">
+        <span class="method post">POST</span>
+        <span class="path">/api/repairs</span>
+        <span class="desc">Log repair record (Session 4)</span>
+      </div>
+
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="path">/api/dashboard/summary</span>
+        <span class="desc">Dashboard data (Session 5)</span>
+      </div>
+
+    </div>
+
+    <p class="section-title">System Info</p>
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-label">Status</div>
+        <div class="info-value green">● Running</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Port</div>
+        <div class="info-value">8080</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Framework</div>
+        <div class="info-value">Spring Boot 3.3.5</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Database</div>
+        <div class="info-value">MySQL · worthit_db</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Tables Created</div>
+        <div class="info-value green">7 / 7</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Session</div>
+        <div class="info-value">1 of 10 Complete</div>
+      </div>
+    </div>
+
+    <a class="try-btn" href="/api/health" target="_blank">
+      ↗ Try Health Endpoint
+    </a>
+
+    <footer>
+      <span>WorthIt v1.0.0 — Java Full Stack College Project</span>
+      <span>React + Spring Boot + MySQL</span>
+    </footer>
+
+  </div>
+
+</body>
+
+</html>
