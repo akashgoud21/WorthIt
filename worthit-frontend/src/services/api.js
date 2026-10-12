@@ -7,7 +7,7 @@
 export const BACKEND_BASE_URL = (
 import.meta.env.VITE_API_BASE_URL ||
 'https://worthit-backend-2m13.onrender.com'
-).replace(//+$/, '');
+).replace(/\/+$/, '');
 
 const TOKEN_KEY = 'worthit_token';
 const USER_KEY = 'worthit_user';
